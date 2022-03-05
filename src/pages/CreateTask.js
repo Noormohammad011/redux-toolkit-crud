@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -23,11 +24,15 @@ const CreateTask = () => {
   
   return (
     <>
-      <div className='container'>
+      <div className='container col-md-6 offset-md-3 my-3'>
         <h1 className='text-center my-5 text-uppercase'>Create Task</h1>
+
+        <Link to='/' type='button' className='btn btn-outline-dark btn-sm w-25'>
+          Go Back
+        </Link>
       </div>
       <div className='row'>
-        <div className='col'>
+        <div className='col px-4'>
           <form onSubmit={handleSubmit}>
             <div className='mx-auto'>
               <div className='col-md-6 offset-md-3 my-3'>
@@ -51,7 +56,11 @@ const CreateTask = () => {
                 />
               </div>
               <div className='col-md-6 offset-md-3 my-3'>
-                <button type='submit' className='btn btn-primary'>
+                <button
+                  type='submit'
+                  disabled={!text || !description}
+                  className='btn btn-primary'
+                >
                   Submit
                 </button>
               </div>

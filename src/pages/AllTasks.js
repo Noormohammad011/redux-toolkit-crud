@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { getTasks, deleteTask, reset } from '../features/tasks/taskSlice'
+import { getTasks, deleteTask } from '../features/tasks/taskSlice'
 
 const AllTasks = () => {
   const dispatch = useDispatch()
@@ -15,7 +15,7 @@ const AllTasks = () => {
         console.log(message)
       }
     dispatch(getTasks())
-  }, [dispatch, message, dispatch])
+  }, [dispatch, message, isError])
 
 
   if (isLoading) {
@@ -32,25 +32,22 @@ const AllTasks = () => {
   return (
     <div className='container'>
       <h1 className='text-center my-5 text-uppercase'>All Tasks</h1>
-      <div className='row  sm:mx-auto'>
-        <Link
+      <Link
           to='/task'
           type='button'
           className='btn btn-outline-dark btn-sm w-25 my-5'
         >
-          Add Task
+          Create Task
         </Link>
-      </div>
       {tasks.length > 0 ? (
         <div className='row'>
-          <div className='col table-responsive table-sm striped bordered'>
-            <table className='table'>
+          <div className='col px-4'>
+            <table className='table table-responsive table-sm striped bordered'>
               <thead>
                 <tr>
                   <th scope='col'>#</th>
                   <th scope='col'>Task</th>
                   <th scope='col'>Description</th>
-                  <th scope='col'></th>
                   <th scope='col'></th>
                 </tr>
               </thead>
