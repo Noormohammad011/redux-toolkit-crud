@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { getTasks, deleteTask } from '../features/tasks/taskSlice'
+import { getTasks, deleteTask, reset } from '../features/tasks/taskSlice'
 
 const AllTasks = () => {
   const dispatch = useDispatch()
@@ -9,31 +9,30 @@ const AllTasks = () => {
     (state) => state.tasks
   )
 
-
   useEffect(() => {
-      if (isError) {
-        console.log(message)
-      }
+    if (isError) {
+      console.log(message)
+    }
     dispatch(getTasks())
+    return () => {
+      dispatch(reset())
+    }
   }, [dispatch, message, isError])
-
 
   if (isLoading) {
     return <div>Loading...</div>
   }
-  
-
 
   return (
     <div className='container'>
       <h1 className='text-center my-5 text-uppercase'>All Tasks</h1>
       <Link
-          to='/task'
-          type='button'
-          className='btn btn-outline-dark btn-sm w-25 my-5'
-        >
-          Create Task
-        </Link>
+        to='/task'
+        type='button'
+        className='btn btn-outline-dark btn-sm w-25 my-5'
+      >
+        Create Task
+      </Link>
       {tasks.length > 0 ? (
         <div className='row'>
           <div className='col px-4'>
@@ -79,7 +78,6 @@ const AllTasks = () => {
       ) : (
         <h3>You have no tasks</h3>
       )}
-     
     </div>
   )
 }
