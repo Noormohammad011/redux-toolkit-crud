@@ -1,43 +1,46 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
-import { getTask, updateTask } from '../features/tasks/taskSlice'
+import { getTask, reset, updateTask } from '../features/tasks/taskSlice'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 const UpdateTask = () => {
-  const [text, setText] = useState('')
-
-  const [description, setDescription] = useState('')
   const { taskId } = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { tasks, isLoading, isError, message } = useSelector(
+  const { task, isLoading } = useSelector(
     (state) => state.tasks
   )
-  console.log(tasks)
-  useEffect(() => {
-    if (isError) {
-      console.log(message)
-    }
+  
+ 
+  const [formData, setFormData] = useState({
+    text: task.text,
+    description: task.description,
+  })
 
-    if (!tasks || tasks.id !== taskId) {
-      dispatch(getTask(taskId))
-    } else {
-      setText(tasks.text)
-      setDescription(tasks.description)
+  const { text, description } = formData
+  useEffect(() => {
+    dispatch(getTask(taskId))
+    return () => {
+      reset()
     }
-  }, [taskId, tasks.id, isError, message, dispatch])
+  }, [dispatch, taskId])
 
   if (isLoading) {
     return <div>Loading...</div>
   }
-  console.log(tasks)
+
+   const onChange = (e) => {
+     setFormData((prevState) => ({
+       ...prevState,
+       [e.target.name]: e.target.value,
+     }))
+   }
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    dispatch(updateTask({ id: tasks.id, text, description }))
-    setText('')
-    setDescription('')
+    dispatch(updateTask({ id: task.id, text, description }))
+    setFormData({ text: '', description: '' })
     toast.success('Task Updated Successfully')
     navigate('/')
   }
@@ -59,8 +62,9 @@ const UpdateTask = () => {
                   className='form-control'
                   placeholder='Task'
                   aria-label='Task'
+                  name='text'
                   value={text}
-                  onChange={(e) => setText(e.target.value)}
+                  onChange={onChange}
                 />
               </div>
               <div className='col-md-6 offset-md-3 my-3'>
@@ -70,7 +74,8 @@ const UpdateTask = () => {
                   placeholder='Description'
                   aria-label='Task'
                   value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  name='description'
+                  onChange={onChange}
                 />
               </div>
               <div className='col-md-6 offset-md-3 my-3'>

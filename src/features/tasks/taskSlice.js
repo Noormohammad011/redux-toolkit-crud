@@ -3,6 +3,7 @@ import taskService from './taskService'
 
 const initialState = {
   tasks: [],
+  task: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -138,7 +139,7 @@ export const taskSlice = createSlice({
       .addCase(getTask.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.tasks = action.payload
+        state.task = state.tasks.find((task) => task.id === action.payload.id)
       })
       .addCase(getTask.rejected, (state, action) => {
         state.isLoading = false
