@@ -22,12 +22,6 @@ const AllTasks = () => {
     return <div>Loading...</div>
   }
   
-  const deleteHandler = (id) => {
-    if (window.confirm('Are you sure')) {
-      dispatch(deleteTask(id))
-      window.location.reload()
-    }
-  }
 
   return (
     <div className='container'>
@@ -70,7 +64,7 @@ const AllTasks = () => {
                         <button
                           type='button'
                           className='btn btn-danger'
-                          onClick={() => deleteHandler(task.id)}
+                          onClick={() => dispatch(deleteTask(task.id))}
                         >
                           <i className='fas fa-trash'></i>
                         </button>

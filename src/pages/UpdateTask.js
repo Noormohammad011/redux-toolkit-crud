@@ -14,6 +14,7 @@ const UpdateTask = () => {
   const { tasks, isLoading, isError, message } = useSelector(
     (state) => state.tasks
   )
+  console.log(tasks)
   useEffect(() => {
     if (isError) {
       console.log(message)
@@ -30,9 +31,10 @@ const UpdateTask = () => {
   if (isLoading) {
     return <div>Loading...</div>
   }
-
+  console.log(tasks)
   const handleSubmit = (e) => {
     e.preventDefault()
+
     dispatch(updateTask({ id: tasks.id, text, description }))
     setText('')
     setDescription('')
